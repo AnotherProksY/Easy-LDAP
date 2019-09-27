@@ -1,5 +1,47 @@
 #!/bin/bash
 
+#Create config----------------
+function CONFIG {
+cat > /etc/ezldap.conf <<EOF
+####################################
+#    Config file for Easy-LDAP     #
+####################################
+# Write your credentials correctly #
+#  All info must be specified in   #
+#          double quotes           #
+####################################
+
+# Your Domain for ldaps://..
+domain="super.domain.com"
+
+# Your username for auth
+username="user_name@super.domain.com"
+
+# Your pass for auth
+password="your_pass"
+
+# Base DC
+search_base="dc=super,dc=domain,dc=com"
+
+####################################
+EOF
+
+"${EDITOR:-nano}" /etc/ezldap.conf
+
+exit 1
+}
+#----------------------------
+
+#Check config-----------------
+FILE=/etc/ezldap.conf
+if test -f "$FILE";
+then
+    source /etc/ezldap.conf
+else
+    CONFIG
+fi
+#-----------------------------
+
 #Get file name---------------
 _self="${0##*/}"
 #----------------------------
@@ -26,11 +68,11 @@ function HELP {
     echo "Usage:"
     echo ""
     echo "To find user"
-    echo "bash $_self -n 'Surname Firstname' -a 'attribute_1 attribute_2'"
-    echo "bash $_self -l '$current_user' -a 'attribute_1 attribute_2'"
+    echo "$_self -n 'Surname Firstname' -a 'attribute_1 attribute_2'"
+    echo "$_self -l '$current_user' -a 'attribute_1 attribute_2'"
     echo ""
     echo "To find group"
-    echo "bash $_self -g 'any_group' -a 'attribute_1 attribute_2'"
+    echo "$_self -g 'any_group' -a 'attribute_1 attribute_2'"
     echo ""
     exit 1
 }
@@ -65,10 +107,10 @@ fi
 #----------------------------
 
 ldapsearch \
--H ldaps://domain.controller.com \
--D "user_name@domain.com" \
--W \
--b "dc=domain,dc=controller,dc=com" \
+-H ldaps://$domain \
+-D "$username" \
+-w "$password" \
+-b "$search_base" \
 $filter \
 $basic_attribute \
 $ATTRIBUTE \

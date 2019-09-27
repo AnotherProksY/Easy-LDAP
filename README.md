@@ -25,6 +25,8 @@ export PATH=~/bin:$PATH
 alias ezldap='ezldap.sh'
 
 #сохраняем
+
+source ~/.bash_profile
 ```
 
 ## Использование

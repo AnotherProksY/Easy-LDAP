@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#Get file name---------------
+_self="${0##*/}"
+#----------------------------
+
 #Create config----------------
 function CONFIG {
 cat > /etc/ezldap.conf <<EOF
@@ -38,13 +42,14 @@ if test -f "$FILE";
 then
     source /etc/ezldap.conf
 else
-    CONFIG
+    if [ "$EUID" -ne 0 ]
+    then echo "Please run 'sudo $_self'"
+        exit 1
+    else
+        CONFIG
+    fi
 fi
 #-----------------------------
-
-#Get file name---------------
-_self="${0##*/}"
-#----------------------------
 
 #Get user name---------------
 if ! [ $(id -u) = 0 ];

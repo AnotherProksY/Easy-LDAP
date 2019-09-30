@@ -35,6 +35,10 @@ source ~/.bash_profile
 ezldap -n 'Surname Firstname' -a 'attribute_1 attribute_2'
 ezldap -l 'user_name' -a 'attribute_1 attribute_2'
 
-#или просто
+ezldap -g 'group_name' -a 'attribute_1 attribute_2'
+
+ezldap -m
+
+#help
 ezldap -h
 ```

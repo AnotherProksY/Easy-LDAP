@@ -121,11 +121,12 @@ function HELP {
 
     echo "Options:"
     echo ""
-    echo "-h                        show help"
-    echo "-n                        search user by 'CN'"
-    echo "-l                        search user by 'sAMAccountName'"
-    echo "-g                        search group by 'CN'"
-    echo "-a                        add additional attribute's"
+    echo "-h           show help"
+    echo "-n  <name>   search user by 'CN'"
+    echo "-l  <login>  search user by 'sAMAccountName'"
+    echo "-g  <group>  search group by 'CN'"
+    echo "-a  <attr>   add additional attribute's"
+    echo "-m           add/delete user from group"
     echo ""
     echo "Usage:"
     echo ""
@@ -135,6 +136,9 @@ function HELP {
     echo ""
     echo "To find group"
     echo "$_self -g 'any_group' -a 'attribute_1 attribute_2'"
+    echo ""
+    echo "To add/delete user from group"
+    echo "$_self -m"
     echo ""
     exit 1
 }

@@ -7,7 +7,7 @@
 ```bash
 git clone https://github.com/AnotherProksY/Easy-LDAP.git
 cd Easy-LDAP/
-mv ezldap.sh /usr/local/bin/;chmod +x ezldap.sh
+cp ezldap.sh /usr/local/bin/;chmod +x ezldap.sh
 ```
 Если нет папки bin
 ```bash

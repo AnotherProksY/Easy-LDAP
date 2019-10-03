@@ -61,7 +61,7 @@ function LDAP_QUERY {
         if [ -z "$GROUP" ]
         then
             filter="(&(objectCategory=Person)(cn=*$NAME)(sAMAccountName=*$LOGIN))"
-            basic_attribute="name sAMAccountName mail physicalDeliveryOfficeName telephoneNumber birthDate"
+            basic_attribute="name displayName sAMAccountName mail physicalDeliveryOfficeName telephoneNumber birthDate"
         else
             filter="(&(objectClass=group)(cn=*$GROUP))"
             basic_attribute="member distinguishedName name sAMAccountName managedBy mail mailNickname description"
@@ -76,7 +76,9 @@ function LDAP_QUERY {
         $filter \
         $basic_attribute \
         $ATTRIBUTE \
-        | egrep -v "^# .+" | egrep -v "^ref: .+"
+        | egrep -v "^# .+" | egrep -v "^ref: .+" \
+        | perl -MMIME::Base64 -MEncode=decode -n -00 -e 's/\n 
++//g;s/(?<=:: )(\S+)/decode("UTF-8",decode_base64($1))/eg;print'
     else
 echo "dn: $group_dn
 changetype: modify

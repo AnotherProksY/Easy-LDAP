@@ -1,52 +1,7 @@
 #!/bin/bash
 
 #########################CONFIG############################
-#Create Config---------------
-function CONFIG {
-echo "Can't find your config file.."
-echo ""
-echo "Starting to create a new one"
-echo "Config file will be located in /etc/ezldap/"
-sudo mkdir /etc/ezldap
-sudo bash -c 'cat > /etc/ezldap/ezldap.conf <<EOF
-####################################
-#    Config file for Easy-LDAP     #
-####################################
-# Write your credentials correctly #
-#  All info must be specified in   #
-#          double quotes           #
-####################################
-
-# Your Domain for ldaps://..
-domain="super.domain.com"
-
-# Your username for auth
-username="user_name@super.domain.com"
-
-# Your pass for auth
-password="your_pass"
-
-# Base DC
-search_base="dc=super,dc=domain,dc=com"
-
-####################################
-EOF'
-
-sudo "${EDITOR:-nano}" /etc/ezldap/ezldap.conf
-
-exit 1
-}
-#----------------------------
-
-#Check config----------------
-FILE=/etc/ezldap/ezldap.conf
-if test -f "$FILE";
-then
-    source /etc/ezldap/ezldap.conf
-else
-    CONFIG
-fi
-#----------------------------
+source /etc/ezldap/ezldap.conf
 ###########################END#############################
 
 
@@ -106,6 +61,8 @@ function MODIFY {
 #----------------------------
 ###########################END#############################
 
+
+###########################CORE############################
 #Help------------------------
 function HELP {
     #Get file name----------------
@@ -163,7 +120,9 @@ done
 
 shift $((OPTIND-1))
 #----------------------------
+###########################END#############################
 
-#Execute query---------------
+
+###########################MAIN############################
 LDAP_QUERY
-#----------------------------
+###########################END#############################

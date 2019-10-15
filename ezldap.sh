@@ -26,7 +26,7 @@ function LDAP_QUERY {
         ldapsearch \
         -H ldaps://$domain \
         -D "$username" \
-        -w "$password" \
+        -W \
         -b "$search_base" \
         $filter \
         $basic_attribute \
@@ -42,7 +42,7 @@ member: $user_dn" | \
         ldapmodify \
         -H ldaps://$domain \
         -D "$username" \
-        -w "$password" \
+        -W \
         | egrep -v "^# .+" | egrep -v "^ref: .+"
     fi
 }

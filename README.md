@@ -3,30 +3,11 @@
 
 ## Установка
 
-Качаем, делаем файл исполняемым
+Качаем, запускаем install.sh
 ```bash
 git clone https://github.com/AnotherProksY/Easy-LDAP.git
 cd Easy-LDAP/
-cp ezldap.sh /usr/local/bin/;chmod +x ezldap.sh
-```
-Если нет папки bin
-```bash
-mkdir ~/bin
-
-#Если есть, пропускаем 
-```
-
-Экспортируем файл
-```bash
-nano ~/.bash_profile
-
-#вставляем это
-export PATH=~/bin:$PATH
-alias ezldap='ezldap.sh'
-
-#сохраняем
-
-source ~/.bash_profile
+bash install.sh
 ```
 
 ## Использование

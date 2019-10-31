@@ -40,6 +40,13 @@ fi
 
 
 #########################CONFIG############################
+if ! [ $(id -u) = 0 ];
+then
+    current_user=$USER
+else
+    current_user=$SUDO_USER
+fi
+
 function CONFIG {
 echo "Starting to create your config file.."
 echo "Config file will be located in /etc/ezldap/"
@@ -60,6 +67,9 @@ domain="super.domain.com"
 # Your username for auth
 username="user_name@super.domain.com"
 
+# Your pass for auth
+password="auth_password"
+
 # Base DC
 search_base="dc=super,dc=domain,dc=com"
 
@@ -67,6 +77,8 @@ search_base="dc=super,dc=domain,dc=com"
 EOF'
 
 sudo "${EDITOR:-nano}" /etc/ezldap/ezldap.conf
+sudo chmod go-r /etc/ezldap/ezldap.conf
+sudo chown $current_user /etc/ezldap/ezldap.conf
 
 exit 1
 }

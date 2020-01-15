@@ -13,6 +13,7 @@ bash install.sh
 ## Использование
 
 ```bash
+ezldap -d 'Surname Firstname' -a 'attribute_1 attribute_2'
 ezldap -n 'Surname Firstname' -a 'attribute_1 attribute_2'
 ezldap -l 'user_name' -a 'attribute_1 attribute_2'
 

@@ -24,6 +24,7 @@ function LDAP_QUERY {
         #-----------------------------
 
         ldapsearch \
+        -o ldif-wrap=no \
         -H ldaps://$domain \
         -D "$username" \
         -w "$password" \

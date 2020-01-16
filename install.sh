@@ -1,11 +1,6 @@
 #!/bin/bash
 
 #########################INSTALL###########################
-echo "#Moving ezldap.sh to /usr/local/bin/ and giving execute option"
-sudo cp ezldap.sh /usr/local/bin/;sudo chmod +x /usr/local/bin/ezldap.sh
-sleep 1
-echo ""
-
 if [ ! -d "~/bin" ]; then
     echo "Creating ~/bin"
     mkdir ~/bin
@@ -16,10 +11,9 @@ fi
 FILE=~/.bash_profile
 if test -f "$FILE";
 then
-    echo "Adding options to .bash_profile"
+    echo 'Adding ~/bin to $PATH .bash_profile'
     cat >> ~/.bash_profile <<EOF
 export PATH=~/bin:$PATH
-alias ezldap='ezldap.sh'
 EOF
     source ~/.bash_profile
     sleep 1
@@ -27,15 +21,19 @@ EOF
 else
     echo "Creating ~/.bash_profile .."
     touch ~/.bash_profile
-    echo "Adding options to .bash_profile"
+    echo 'Adding ~/bin to $PATH .bash_profile'
     cat >> ~/.bash_profile <<EOF
 export PATH=~/bin:$PATH
-alias ezldap='ezldap.sh'
 EOF
     source ~/.bash_profile
     sleep 1
     echo ""
 fi
+
+echo "#Moving ezldap.sh to ~/bin/ and giving execute option"
+cp ezldap ~/bin/;sudo chmod +x ~/bin/ezldap
+sleep 1
+echo ""
 ###########################END#############################
 
 

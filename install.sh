@@ -30,8 +30,16 @@ EOF
     echo ""
 fi
 
-echo "#Moving ezldap.sh to ~/bin/ and giving execute option"
-cp ezldap ~/bin/;sudo chmod +x ~/bin/ezldap
+echo "Do you want to copy file or create symlink ?" 
+read -p "'1 copy' || '2 symlink' [1/2]: " answer
+if [ $answer == "1" ]
+then
+  echo "Copying ezldap to ~/bin/"
+  cp ezldap ~/bin/;sudo chmod +x ~/bin/ezldap
+else
+  echo "Creating symlink for ezldap to ~/bin/"
+  ln -s ezldap ~/bin/;sudo chmod +x ~/bin/ezldap
+fi
 sleep 1
 echo ""
 ###########################END#############################

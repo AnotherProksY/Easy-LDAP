@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #########################INSTALL###########################
-if [ ! -d "~/bin" ]; then
+if [ ! -d "$HOME/bin" ]; then
     echo "Creating ~/bin"
     mkdir ~/bin
     sleep 1
@@ -38,7 +38,7 @@ then
   cp ezldap ~/bin/;sudo chmod +x ~/bin/ezldap
 else
   echo "Creating symlink for ezldap to ~/bin/"
-  ln -s ezldap ~/bin/;sudo chmod +x ~/bin/ezldap
+  ln -s "$PWD/ezldap" ~/bin;sudo chmod +x ~/bin/ezldap
 fi
 sleep 1
 echo ""

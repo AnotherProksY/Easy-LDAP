@@ -31,7 +31,7 @@ function LDAP_QUERY {
     $filter \
     $basic_attribute \
     $ATTRIBUTE \
-    | egrep -v "^# .+" | egrep -v "^ref: .+" \
+    | egrep -v "^#|search|result|ref: .+" \
     | perl -MMIME::Base64 -MEncode=decode -n -00 -e 's/\n 
 +//g;s/(?<=:: )(\S+)/decode("UTF-8",decode_base64($1))/eg;print'
     #-----------------------------
@@ -45,7 +45,7 @@ member: $user_dn" | \
     -H ldaps://$domain \
     -D "$username" \
     -w "$password" \
-    | egrep -v "^# .+" | egrep -v "^ref: .+"
+    | egrep -v "^#|search|result|ref: .+"
     #-----------------------------
   fi
 }

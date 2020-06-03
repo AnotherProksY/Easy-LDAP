@@ -4,6 +4,9 @@
 .AppleDouble
 .LSOverride
 
+# Ldif files
+.ldif
+
 # Icon must end with two \r
 Icon
 

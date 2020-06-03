@@ -5,7 +5,7 @@
 .LSOverride
 
 # Ldif files
-.ldif
+*.ldif
 
 # Icon must end with two \r
 Icon

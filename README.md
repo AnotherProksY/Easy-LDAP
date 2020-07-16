@@ -13,14 +13,20 @@ bash install.sh
 ## Использование
 
 ```bash
+# Search for users
 ezldap -d 'Surname Firstname' -a 'attribute_1 attribute_2'
 ezldap -n 'Surname Firstname' -a 'attribute_1 attribute_2'
 ezldap -l 'user_name' -a 'attribute_1 attribute_2'
 
+# Search for groups
 ezldap -g 'group_name' -a 'attribute_1 attribute_2'
 
+# Add/Delete user from group
 ezldap -m
 
-#help
+# Edit config file
+ezldap -c
+
+# Show help
 ezldap -h
 ```

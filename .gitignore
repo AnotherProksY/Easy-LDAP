@@ -7,6 +7,9 @@
 # Ldif files
 *.ldif
 
+# Vim
+*.swp
+
 # Icon must end with two \r
 Icon
 

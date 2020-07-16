@@ -66,6 +66,19 @@ function MODIFY {
 
 
 ###########################CORE############################
+#Change Config------------------
+function CONFIG {
+  echo "Opening your config file.."
+  sleep 1
+  sudo "${EDITOR:-nano}" /etc/ezldap/ezldap.conf
+  source /etc/ezldap/ezldap.conf
+  echo ""
+  echo "File saved and sourced !"
+  echo ""
+  exit 1
+}
+#-------------------------------
+
 #Help options-------------------
 function HELP {
   #Get file name----------------
@@ -89,6 +102,7 @@ function HELP {
   echo "-g  <group>  search group by 'sAMAccountName'"
   echo "-a  <attr>   add additional attribute's"
   echo "-m           add/delete user from group"
+  echo "-c           edit config file"
   echo ""
   echo "Usage:"
   echo ""
@@ -108,7 +122,7 @@ function HELP {
 #----------------------------
 
 #Flag options----------------
-while getopts :d:n:l:g:a:mh flag; do
+while getopts :d:n:l:g:a:mhc flag; do
   case $flag in
     d) DISNAME=${OPTARG} ;;
     n) NAME=${OPTARG} ;;
@@ -117,6 +131,7 @@ while getopts :d:n:l:g:a:mh flag; do
     a) ATTRIBUTE=${OPTARG} ;;
     m) MODIFY ;;
     h) HELP ;;
+    c) CONFIG ;;
     \?) printf "illegal option: -%s\n" "$OPTARG" >&2
         HELP
         ;;

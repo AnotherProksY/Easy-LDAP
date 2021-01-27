@@ -13,7 +13,7 @@ function LDAP_QUERY {
   if [ $LDAP_TYPE == "search" ]; then
     #Filter options---------------
     if [ -z "$GROUP" ]; then
-      filter="(&(objectCategory=Person)(displayName=*$DISNAME)(cn=*$NAME)(sAMAccountName=*$LOGIN))"
+      filter="(&(objectCategory=Person)(mail=*$EMAIL)(displayName=*$DISNAME)(cn=*$NAME)(sAMAccountName=*$LOGIN))"
       basic_attribute="name displayName sAMAccountName mail physicalDeliveryOfficeName telephoneNumber birthDate"
     else
       filter="(&(objectClass=group)(sAMAccountName=*$GROUP))"
@@ -98,6 +98,7 @@ function HELP {
   echo "-h           show help"
   echo "-d  <name>   search user by 'displayName'"
   echo "-n  <name>   search user by 'CN'"
+  echo "-e  <mail>   search user by 'mail'"
   echo "-l  <login>  search user by 'sAMAccountName'"
   echo "-g  <group>  search group by 'sAMAccountName'"
   echo "-a  <attr>   add additional attribute's"
@@ -109,6 +110,7 @@ function HELP {
   echo "To find user"
   echo "$_self -d 'Surname Firstname' -a 'attribute_1 attribute_2'"
   echo "$_self -n 'Surname Firstname' -a 'attribute_1 attribute_2'"
+  echo "$_self -e 'username@domain.com' -a 'attribute_1 attribute_2'"
   echo "$_self -l '$current_user' -a 'attribute_1 attribute_2'"
   echo ""
   echo "To find group"
@@ -122,10 +124,11 @@ function HELP {
 #----------------------------
 
 #Flag options----------------
-while getopts :d:n:l:g:a:mhc flag; do
+while getopts :d:n:e:l:g:a:mhc flag; do
   case $flag in
     d) DISNAME=${OPTARG} ;;
     n) NAME=${OPTARG} ;;
+    e) EMAIL=${OPTARG} ;;
     l) LOGIN=${OPTARG} ;;
     g) GROUP=${OPTARG} ;;
     a) ATTRIBUTE=${OPTARG} ;;

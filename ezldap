@@ -6,50 +6,51 @@ source /etc/ezldap/ezldap.conf
 
 
 ###########################LDAP############################
-LDAP_TYPE="search"
 
 #LDAP query------------------
-function LDAP_QUERY {
-    if [ $LDAP_TYPE == "search" ]; then
-        #Filter options---------------
-        if [ -z "$GROUP" ]; then
-            filter="(&(objectCategory=Person)(mail=*$EMAIL)(displayName=*$DISNAME)(cn=*$NAME)(sAMAccountName=*$LOGIN))"
-            basic_attribute="name displayName sAMAccountName mail physicalDeliveryOfficeName telephoneNumber birthDate"
-        else
-            filter="(&(objectClass=group)(sAMAccountName=*$GROUP))"
-            basic_attribute="member distinguishedName name sAMAccountName managedBy mail mailNickname description"
-        fi
-        #-----------------------------
-
-        #LDAP user/group query--------
-        ldapsearch \
-        -LLL \
-        -o ldif-wrap=no \
-        -H ldaps://$domain \
-        -D "$username" \
-        -w "$password" \
-        -b "$search_base" \
-        $filter \
-        $basic_attribute \
-        $ATTRIBUTE \
-        | egrep -v "^# refldaps:" \
-        | perl -MMIME::Base64 -Mutf8 -pe 's/^([-a-zA-Z0-9;]+):(:\s+)(\S+)$/$1.$2.&decode_base64($3)/e'
-        #-----------------------------
+function LDAP_SEARCH {
+    #Filter options--------------
+    if [ -z "$GROUP" ]; then
+        filter="(&(objectCategory=Person)(mail=*$EMAIL)(displayName=*$DISNAME)(cn=*$NAME)(sAMAccountName=*$LOGIN))"
+        basic_attribute="name displayName sAMAccountName mail physicalDeliveryOfficeName telephoneNumber birthDate"
     else
-        #LDAP modify------------------
-        {
-        echo "dn: $group_dn"
-        echo "changetype: modify"
-        echo "$modify_type: member"
-        echo "member: $user_dn"
-        } | \
-        ldapmodify \
-        -H ldaps://$domain \
-        -D "$username" \
-        -w "$password" \
-        | egrep -v "^#|search|result|ref: .+"
-        #-----------------------------
+        filter="(&(objectClass=group)(sAMAccountName=*$GROUP))"
+        basic_attribute="member distinguishedName name sAMAccountName managedBy mail mailNickname description"
     fi
+    #-----------------------------
+
+    #LDAP user/group query--------
+    ldapsearch \
+    -LLL \
+    -o ldif-wrap=no \
+    -H ldaps://$domain \
+    -D "$username" \
+    -w "$password" \
+    -b "$search_base" \
+    $filter \
+    $basic_attribute \
+    $ATTRIBUTE \
+    | egrep -v "^# refldaps:" \
+    | perl -MMIME::Base64 -Mutf8 -pe 's/^([-a-zA-Z0-9;]+):(:\s+)(\S+)$/$1.$2.&decode_base64($3)/e'
+    #-----------------------------
+}
+
+function LDAP_MODIFY {
+    #LDAP modify------------------
+    {
+    echo "dn: $group_dn"
+    echo "changetype: modify"
+    echo "$modify_type: member"
+    echo "member: $user_dn"
+    } | \
+    ldapmodify \
+    -H ldaps://$domain \
+    -D "$username" \
+    -w "$password" \
+    | egrep -v "^modifying entry"
+    echo "Successfully $modify_type!"
+    exit 1
+    #-----------------------------
 }
 #----------------------------
 
@@ -60,8 +61,7 @@ function MODIFY {
     read -p "Copy 'DN' user attribute and paste here: " user_dn
     echo ""
     echo ""
-    LDAP_TYPE="modify"
-    LDAP_QUERY
+    LDAP_MODIFY
 }
 #----------------------------
 ###########################END#############################
@@ -149,5 +149,5 @@ shift $((OPTIND-1))
 
 
 ###########################MAIN############################
-LDAP_QUERY
+LDAP_SEARCH
 ###########################END#############################

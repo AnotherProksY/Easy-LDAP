@@ -128,8 +128,8 @@ function HELP {
 #Flag options----------------
 while getopts :d:n:e:l:g:a:mhc flag; do
     case $flag in
-        d) DISNAME=${OPTARG} ;;
-        n) NAME=${OPTARG} ;;
+        d) DISNAME=${OPTARG// /*} ;;
+        n) NAME=${OPTARG// /*} ;;
         e) EMAIL=${OPTARG} ;;
         l) LOGIN=${OPTARG} ;;
         g) GROUP=${OPTARG} ;;

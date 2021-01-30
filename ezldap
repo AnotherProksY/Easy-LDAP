@@ -10,8 +10,11 @@ source /etc/ezldap/ezldap.conf
 #LDAP query------------------
 function LDAP_SEARCH {
     #Filter options--------------
+    NAME=${NAME[@]}
+    DISNAME=${DISNAME[@]}
+
     if [ -z "$GROUP" ]; then
-        filter="(&(objectCategory=Person)(mail=*$EMAIL)(displayName=*$DISNAME)(cn=*$NAME)(sAMAccountName=*$LOGIN))"
+        filter="(&(objectCategory=Person)(mail=*$EMAIL)(displayName=*${DISNAME// /*})(cn=*${NAME// /*})(sAMAccountName=*$LOGIN))"
         basic_attribute="name displayName sAMAccountName mail physicalDeliveryOfficeName telephoneNumber birthDate"
     else
         filter="(&(objectClass=group)(sAMAccountName=*$GROUP))"
@@ -29,7 +32,7 @@ function LDAP_SEARCH {
     -b "$search_base" \
     $filter \
     $basic_attribute \
-    $ATTRIBUTE \
+    ${ATTRIBUTE[@]} \
     | egrep -v "^# refldaps:" \
     | perl -MMIME::Base64 -Mutf8 -pe 's/^([-a-zA-Z0-9;]+):(:\s+)(\S+)$/$1.$2.&decode_base64($3)/e'
     #-----------------------------
@@ -128,12 +131,27 @@ function HELP {
 #Flag options----------------
 while getopts :d:n:e:l:g:a:mhc flag; do
     case $flag in
-        d) DISNAME=${OPTARG// /*} ;;
-        n) NAME=${OPTARG// /*} ;;
+        d) DISNAME=(${OPTARG})
+           until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
+                DISNAME+=($(eval "echo \${$OPTIND}"))
+                OPTIND=$((OPTIND + 1))
+           done
+           ;;
+        n) NAME=(${OPTARG})
+           until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
+                NAME+=($(eval "echo \${$OPTIND}"))
+                OPTIND=$((OPTIND + 1))
+           done
+           ;;
         e) EMAIL=${OPTARG} ;;
         l) LOGIN=${OPTARG} ;;
         g) GROUP=${OPTARG} ;;
-        a) ATTRIBUTE=${OPTARG} ;;
+        a) ATTRIBUTE=("$OPTARG") 
+           until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
+                ATTRIBUTE+=($(eval "echo \${$OPTIND}"))
+                OPTIND=$((OPTIND + 1))
+           done
+           ;;
         m) MODIFY ;;
         h) HELP ;;
         c) CONFIG ;;

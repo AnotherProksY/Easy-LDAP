@@ -10,11 +10,13 @@ fi
 
 FILE=~/.bash_profile
 if test -f "$FILE"; then
-  echo 'Adding ~/bin to $PATH .bash_profile'
-  cat assets/bash.md >> ~/.bash_profile
-  source ~/.bash_profile
-  sleep 1
-  echo ""
+  if ! grep -qe '$HOME/bin\|~/bin' "$FILE"; then
+    echo 'Adding ~/bin to $PATH .bash_profile'
+    cat assets/bash.md >> ~/.bash_profile
+    source ~/.bash_profile
+    sleep 1
+    echo ""
+  fi
 else
   echo "Creating ~/.bash_profile .."
   touch ~/.bash_profile
@@ -25,17 +27,20 @@ else
   echo ""
 fi
 
-echo "Do you want to copy file or create symlink ?" 
-read -p "'1 copy' || '2 symlink' [1/2]: " answer
-if [ $answer == "1" ]; then
-  echo "Copying ezldap to ~/bin/"
-  cp ezldap ~/bin/;sudo chmod +x ~/bin/ezldap
-else
-  echo "Creating symlink for ezldap to ~/bin/"
-  ln -s "$PWD/ezldap" ~/bin;sudo chmod +x ~/bin/ezldap
+APP_FILE=~/bin/ezldap
+if ! test -f "$APP_FILE"; then
+  echo "Do you want to copy file or create symlink ?" 
+  read -p "'1 copy' || '2 symlink' [1/2]: " answer
+  if [ $answer == "1" ]; then
+    echo "Copying ezldap to ~/bin/"
+    cp ezldap ~/bin/;sudo chmod +x ~/bin/ezldap
+  else
+    echo "Creating symlink for ezldap to ~/bin/"
+    ln -s "$PWD/ezldap" ~/bin;sudo chmod +x ~/bin/ezldap
+  fi
+  sleep 1
+  echo ""
 fi
-sleep 1
-echo ""
 ###########################END#############################
 
 
@@ -46,7 +51,8 @@ else
   current_user=$SUDO_USER
 fi
 
-function CONFIG {
+CONFIG_FILE=/etc/ezldap/ezldap.conf
+if ! test -f "$CONFIG_FILE"; then
   echo "Starting to create your config file.."
   echo "Config file will be located in /etc/ezldap/"
   sleep 2
@@ -56,7 +62,5 @@ function CONFIG {
   sudo chmod go-r /etc/ezldap/ezldap.conf
   sudo chown $current_user /etc/ezldap/ezldap.conf
   exit 1
-}
-
-CONFIG
+fi
 ###########################END#############################

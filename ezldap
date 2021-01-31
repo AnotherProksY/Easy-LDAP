@@ -10,11 +10,8 @@ source /etc/ezldap/ezldap.conf
 #LDAP query------------------
 function LDAP_SEARCH {
     #Filter options--------------
-    NAME=${NAME[@]}
-    DISNAME=${DISNAME[@]}
-
     if [ -z "$GROUP" ]; then
-        filter="(&(objectCategory=Person)(mail=*$EMAIL)(displayName=*${DISNAME// /*})(cn=*${NAME// /*})(sAMAccountName=*$LOGIN))"
+        filter="(&(objectCategory=Person)(mail=*$EMAIL)(displayName=*${DISNAME})(cn=*${NAME})(sAMAccountName=*$LOGIN))"
         basic_attribute="name displayName sAMAccountName mail physicalDeliveryOfficeName telephoneNumber birthDate"
     else
         filter="(&(objectClass=group)(sAMAccountName=*$GROUP))"
@@ -129,39 +126,88 @@ function HELP {
 #----------------------------
 
 #Flag options----------------
-while getopts :d:n:e:l:g:a:mhc flag; do
-    case $flag in
-        d) DISNAME=(${OPTARG})
-           until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
-                DISNAME+=($(eval "echo \${$OPTIND}"))
-                OPTIND=$((OPTIND + 1))
-           done
-           ;;
-        n) NAME=(${OPTARG})
-           until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
-                NAME+=($(eval "echo \${$OPTIND}"))
-                OPTIND=$((OPTIND + 1))
-           done
-           ;;
-        e) EMAIL=${OPTARG} ;;
-        l) LOGIN=${OPTARG} ;;
-        g) GROUP=${OPTARG} ;;
-        a) ATTRIBUTE=("$OPTARG") 
-           until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
-                ATTRIBUTE+=($(eval "echo \${$OPTIND}"))
-                OPTIND=$((OPTIND + 1))
-           done
-           ;;
-        m) MODIFY ;;
-        h) HELP ;;
-        c) CONFIG ;;
-        \?) printf "illegal option: -%s\n" "$OPTARG" >&2
-            HELP
-            ;;
-    esac
-done
+function CHECK_ARG()
+{
+    if [[ $2 == -* ]]; then 
+        echo "Option $1 requires an argument" >&2
+        exit 1
+    fi
+}
 
-shift $((OPTIND-1))
+function PARSE_PARAM()
+{
+    if [ -z "$1" ]; then
+        echo "Empty list of options" >&2
+        echo
+        HELP
+    fi
+
+    while getopts ":d:n:e:l:g:a:mhc" opt; do
+        case $opt in
+            d)
+                CHECK_ARG "-d" "$OPTARG"
+                ARG_LIST_D=(${OPTARG})
+                until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
+                    ARG_LIST_D+=($(eval "echo \${$OPTIND}"))
+                    OPTIND=$((OPTIND + 1))
+                done
+                DISNAME=$(echo ${ARG_LIST_D[@]} | tr ' ' "*")
+            ;;
+            n)
+                CHECK_ARG "-n" "$OPTARG"
+                ARG_LIST_N=(${OPTARG})
+                until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
+                    ARG_LIST_N+=($(eval "echo \${$OPTIND}"))
+                    OPTIND=$((OPTIND + 1))
+                done
+                NAME=$(echo ${ARG_LIST_N[@]} | tr ' ' "*")
+            ;;
+            e)
+                CHECK_ARG "-e" "$OPTARG"
+                EMAIL=${OPTARG}
+            ;;
+            l)
+                CHECK_ARG "-l" "$OPTARG"
+                LOGIN=${OPTARG}
+            ;;
+            g)
+                CHECK_ARG "-g" "$OPTARG"
+                GROUP=${OPTARG}
+            ;;
+            a)
+                CHECK_ARG "-a" "$OPTARG"
+                ARG_LIST_A=(${OPTARG})
+                until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
+                    ARG_LIST_A+=($(eval "echo \${$OPTIND}"))
+                    OPTIND=$((OPTIND + 1))
+                done
+                ATTRIBUTE=$(echo ${ARG_LIST_A[@]} | tr ' ' "*")
+            ;;
+            m)
+                MODIFY
+            ;;
+            h)
+                HELP
+            ;;
+            c)
+                CONFIG
+            ;;
+            \?)
+                echo "illegal option: -$OPTARG" >&2
+                echo "Check available options using: -h"
+                exit 1
+            ;;
+            :)
+                echo "Option -$OPTARG requires an argument!" >&2
+                echo "Check available options using: -h"
+                exit 1
+            ;;
+        esac
+    done
+}
+
+
+PARSE_PARAM $@
 #----------------------------
 ###########################END#############################
 

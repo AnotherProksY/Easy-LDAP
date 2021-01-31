@@ -61,6 +61,17 @@ if ! test -f "$CONFIG_FILE"; then
   sudo "${EDITOR:-nano}" /etc/ezldap/ezldap.conf
   sudo chmod go-r /etc/ezldap/ezldap.conf
   sudo chown $current_user /etc/ezldap/ezldap.conf
+fi
+
+INSTALL_FILE=/etc/ezldap/install.sh
+if ! test -f "$INSTALL_FILE"; then
+  echo "Copying install.sh to /etc/ezldap.."
+  sleep 1
+  sudo cp install.sh /etc/ezldap/
+  sudo chmod 700 /etc/ezldap/install.sh
+  sudo chown $current_user /etc/ezldap/install.sh
   exit 1
 fi
+
+exit 1
 ###########################END#############################

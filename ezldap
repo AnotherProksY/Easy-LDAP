@@ -29,7 +29,7 @@ function LDAP_SEARCH {
     -b "$search_base" \
     $filter \
     $basic_attribute \
-    ${ATTRIBUTE[@]} \
+    $ATTRIBUTE \
     | egrep -v "^# refldaps:" \
     | perl -MMIME::Base64 -Mutf8 -pe 's/^([-a-zA-Z0-9;]+):(:\s+)(\S+)$/$1.$2.&decode_base64($3)/e'
     #-----------------------------
@@ -181,7 +181,7 @@ function PARSE_PARAM()
                     ARG_LIST_A+=($(eval "echo \${$OPTIND}"))
                     OPTIND=$((OPTIND + 1))
                 done
-                ATTRIBUTE=$(echo ${ARG_LIST_A[@]} | tr ' ' "*")
+                ATTRIBUTE=${ARG_LIST_A[@]}
             ;;
             m)
                 MODIFY

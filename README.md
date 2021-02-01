@@ -6,7 +6,7 @@
     <b>Written on Bash Script with Love ❤️</b>
 </p>
 <p align="center">
-    <a href="https://github.com/AnotherProksY/Easy-LDAP/blob/dev/LICENSE.md">
+    <a href="https://github.com/AnotherProksY/Easy-LDAP/blob/dev/LICENSE">
         <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License Badge">
     </a>
 </p>
@@ -74,5 +74,5 @@ Successfully add!
 
 ## License and Attribution
 
-Easy-LDAP is licensed under the [MIT License][Easy-LDAP-license], a short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+Easy-LDAP is licensed under the [MIT License](https://github.com/AnotherProksY/Easy-LDAP/blob/dev/LICENSE), a short and simple permissive license with conditions only requiring preservation of copyright and license notices.
 Licensed works, modifications, and larger works may be distributed under different terms and without source code.

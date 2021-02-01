@@ -159,7 +159,6 @@ function PARSE_PARAM()
                     OPTIND=$((OPTIND + 1))
                 done
                 DISNAME=$(echo ${ARG_LIST_D[@]} | tr ' ' "*")
-                LDAP_SEARCH
             ;;
             n)
                 CHECK_ARG "-n" "$OPTARG"
@@ -169,22 +168,18 @@ function PARSE_PARAM()
                     OPTIND=$((OPTIND + 1))
                 done
                 NAME=$(echo ${ARG_LIST_N[@]} | tr ' ' "*")
-                LDAP_SEARCH
             ;;
             e)
                 CHECK_ARG "-e" "$OPTARG"
                 EMAIL=${OPTARG}
-                LDAP_SEARCH
             ;;
             l)
                 CHECK_ARG "-l" "$OPTARG"
                 LOGIN=${OPTARG}
-                LDAP_SEARCH
             ;;
             g)
                 CHECK_ARG "-g" "$OPTARG"
                 GROUP=${OPTARG}
-                LDAP_SEARCH
             ;;
             a)
                 CHECK_ARG "-a" "$OPTARG"
@@ -216,6 +211,8 @@ function PARSE_PARAM()
             ;;
         esac
     done
+
+    LDAP_SEARCH
 }
 #----------------------------
 ###########################END#############################

@@ -1,5 +1,6 @@
 <p align="center">
     <img width="15%" src="assets/ezldap.svg" alt="Banner">
+    <p width="15%" style="font-size:45px;font-weight:bold" align="center">Easy-LDAP</p>
 </p>
 <p align="center">
     <b>Easy to use wrapper for commandline LDAP tools.</b><br />
@@ -10,8 +11,11 @@
         <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License Badge">
     </a>
 </p>
+<br />
 
-# Easy-LDAP
+---
+
+<br />
 
 ## Installation
 - Clone:

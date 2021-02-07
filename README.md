@@ -1,6 +1,5 @@
 <p align="center">
-    <img width="15%" src="assets/ezldap.svg" alt="Banner">
-    <p width="15%" style="font-size:45px;font-weight:bold" align="center">Easy-LDAP</p>
+    <img width="25%" src="assets/ezldap.svg" alt="Banner">
 </p>
 <p align="center">
     <b>Easy to use wrapper for commandline LDAP tools.</b><br />

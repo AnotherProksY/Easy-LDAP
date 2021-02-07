@@ -11,22 +11,51 @@ if [ ! -d "$HOME/bin" ]; then
     echo
 fi
 
-# If no "~/.bash_profile", create a new one and then add to PATH
-FILE=~/.bash_profile
+# Check what current shell
+if [[ "$SHELL" =~ "bash" ]]; then
+    FILE=~/.bash_profile
+    SHELL_NAME="bash"
+elif [[ "$SHELL" =~ "zsh" ]]; then
+    FILE=~/.zshrc
+    SHELL_NAME="zsh"
+elif [[ "$SHELL" =~ "fish" ]]; then
+    FILE=~/.config/fish/config.fish
+    SHELL_NAME="fish"
+fi
+
+# If no "~/shell_config" file, create a new one and then add to PATH
 if test -f "$FILE"; then
     if ! grep -qe '$HOME/bin\|~/bin' "$FILE"; then
-        echo 'Adding ~/bin to $PATH .bash_profile'
-        cat assets/bash.md >> ~/.bash_profile
-        source ~/.bash_profile
+        echo 'Adding ~/bin to $PATH '$FILE
+        if [ "$SHELL_NAME" == "bash" ]; then
+            cat assets/bash.md >> ~/.bash_profile
+            source ~/.bash_profile
+        elif [ "$SHELL_NAME" == "zsh" ]; then
+            cat assets/zsh.md >> ~/.zshrc
+            source ~/.zshrc
+        elif [ "$SHELL_NAME" == "fish" ]; then
+            cat assets/fish.md >> ~/.config/fish/config.fish
+            source ~/.config/fish/config.fish
+        fi
         sleep 1
         echo
     fi
 else
-    echo "Creating ~/.bash_profile"
-    touch ~/.bash_profile
-    echo 'Adding ~/bin to $PATH .bash_profile'
-    cat assets/bash.md >> ~/.bash_profile
-    source ~/.bash_profile
+    echo "Creating $FILE"
+    echo 'Adding ~/bin to $PATH '$FILE
+    if [ "$SHELL_NAME" == "bash" ]; then
+        touch ~/.bash_profile
+        cat assets/bash.md >> ~/.bash_profile
+        source ~/.bash_profile
+    elif [ "$SHELL_NAME" == "zsh" ]; then
+        touch ~/.zshrc
+        cat assets/zsh.md >> ~/.zshrc
+        source ~/.zshrc
+    elif [ "$SHELL_NAME" == "fish" ]; then
+        touch ~/.config/fish/config.fish
+        cat assets/fish.md >> ~/.config/fish/config.fish
+        source ~/.config/fish/config.fish
+    fi
     sleep 1
     echo
 fi
@@ -54,13 +83,17 @@ else
     current_user=$SUDO_USER
 fi
 
+# If no "/etc/ezldap" directory, then create a new one
+if [ ! -d "/etc/ezldap" ]; then
+    sudo mkdir /etc/ezldap
+fi
+
 # If no "/etc/ezldap/ezldap.conf", create a new one
 CONFIG_FILE=/etc/ezldap/ezldap.conf
 if ! test -f "$CONFIG_FILE"; then
     echo "Starting to create your config file"
     echo "Config file will be located in /etc/ezldap/"
     sleep 2
-    sudo mkdir /etc/ezldap
     sudo cp assets/ezldap.conf /etc/ezldap/
     sudo "${EDITOR:-nano}" /etc/ezldap/ezldap.conf
     sudo chmod go-r /etc/ezldap/ezldap.conf
@@ -70,11 +103,11 @@ fi
 # If no "/etc/ezldap/install", copy this script to destination directory
 INSTALL_FILE=/etc/ezldap/install
 if ! test -f "$INSTALL_FILE"; then
-    echo "Copying install.sh to /etc/ezldap"
+    echo "Copying install to /etc/ezldap"
     sleep 1
-    sudo cp install.sh /etc/ezldap/
-    sudo chmod 700 /etc/ezldap/install.sh
-    sudo chown $current_user /etc/ezldap/install.sh
+    sudo cp install /etc/ezldap/
+    sudo chmod 700 /etc/ezldap/install
+    sudo chown $current_user /etc/ezldap/install
     exit 1
 fi
 

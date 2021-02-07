@@ -10,6 +10,7 @@
         <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License Badge">
     </a>
 </p>
+
 <br />
 
 ---
@@ -52,6 +53,24 @@ search_base="dc=super,dc=domain,dc=com"
 ```
 - Enjoy :)
 
+<br />
+
+---
+
+<br />
+
+## To uninstall
+- Use this script:
+```bash
+/etc/ezldap/uninstall
+```
+
+<br />
+
+---
+
+<br />
+
 ## Usage examples
 - To find user:
 ```bash
@@ -75,7 +94,17 @@ Copy 'DN' user attribute and paste here: CN=Fazilov Kamil,OU=Users,DC=example,DC
 Successfully add!
 ```
 
+<br />
+
+---
+
+<br />
+
 ## License and Attribution
 
 Easy-LDAP is licensed under the [MIT License](https://github.com/AnotherProksY/Easy-LDAP/blob/dev/LICENSE), a short and simple permissive license with conditions only requiring preservation of copyright and license notices.
 Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+
+<br />
+
+---

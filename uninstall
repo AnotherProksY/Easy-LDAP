@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# Uninstall script for Easy-LDAP
+#
+
+# If "ezldap" in "/bin" directory, delete it
+APP_FILE=~/bin/ezldap
+if test -f "$APP_FILE"; then
+    echo "Removing ezldap from ~/bin/"
+    rm ~/bin/ezldap
+fi
+
+# If "/etc/ezldap" directory exists, then delete it
+if [ -d "/etc/ezldap" ]; then
+    echo "Deleting /etc/ezldap"
+    sudo rm -rf /etc/ezldap
+    echo
+fi
+
+echo "Done!"
+
+exit 1

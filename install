@@ -108,6 +108,16 @@ if ! test -f "$INSTALL_FILE"; then
     sudo cp install /etc/ezldap/
     sudo chmod 700 /etc/ezldap/install
     sudo chown $current_user /etc/ezldap/install
+fi
+
+# If no "/etc/ezldap/uninstall", copy uninstall script to destination directory
+UNINSTALL_FILE=/etc/ezldap/uninstall
+if ! test -f "$UNINSTALL_FILE"; then
+    echo "Copying uninstall to /etc/ezldap"
+    sleep 1
+    sudo cp uninstall /etc/ezldap/
+    sudo chmod 700 /etc/ezldap/uninstall
+    sudo chown $current_user /etc/ezldap/uninstall
     exit 1
 fi
 

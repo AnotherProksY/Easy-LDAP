@@ -95,9 +95,12 @@ if ! test -f "$CONFIG_FILE"; then
     echo "Config file will be located in /etc/ezldap/"
     sleep 2
     sudo cp assets/ezldap.conf /etc/ezldap/
+    sudo cp assets/ezldap.conf /etc/ezldap/ezldap-config.example
     sudo "${EDITOR:-nano}" /etc/ezldap/ezldap.conf
     sudo chmod go-r /etc/ezldap/ezldap.conf
+    sudo chmod go-r /etc/ezldap/ezldap-config.example
     sudo chown $current_user /etc/ezldap/ezldap.conf
+    sudo chown $current_user /etc/ezldap/ezldap-config.example
 fi
 
 # If no "/etc/ezldap/install", copy this script to destination directory

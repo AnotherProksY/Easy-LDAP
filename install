@@ -28,13 +28,13 @@ if test -f "$FILE"; then
     if ! grep -qe '$HOME/bin\|~/bin' "$FILE"; then
         echo 'Adding ~/bin to $PATH '$FILE
         if [ "$SHELL_NAME" == "bash" ]; then
-            cat assets/bash.md >> ~/.bash_profile
+            cat templates/bash.md >> ~/.bash_profile
             source ~/.bash_profile
         elif [ "$SHELL_NAME" == "zsh" ]; then
-            cat assets/zsh.md >> ~/.zshrc
+            cat templates/zsh.md >> ~/.zshrc
             source ~/.zshrc
         elif [ "$SHELL_NAME" == "fish" ]; then
-            cat assets/fish.md >> ~/.config/fish/config.fish
+            cat templates/fish.md >> ~/.config/fish/config.fish
             source ~/.config/fish/config.fish
         fi
         sleep 1
@@ -45,15 +45,15 @@ else
     echo 'Adding ~/bin to $PATH '$FILE
     if [ "$SHELL_NAME" == "bash" ]; then
         touch ~/.bash_profile
-        cat assets/bash.md >> ~/.bash_profile
+        cat templates/bash.md >> ~/.bash_profile
         source ~/.bash_profile
     elif [ "$SHELL_NAME" == "zsh" ]; then
         touch ~/.zshrc
-        cat assets/zsh.md >> ~/.zshrc
+        cat templates/zsh.md >> ~/.zshrc
         source ~/.zshrc
     elif [ "$SHELL_NAME" == "fish" ]; then
         touch ~/.config/fish/config.fish
-        cat assets/fish.md >> ~/.config/fish/config.fish
+        cat templates/fish.md >> ~/.config/fish/config.fish
         source ~/.config/fish/config.fish
     fi
     sleep 1
@@ -94,8 +94,8 @@ if ! test -f "$CONFIG_FILE"; then
     echo "Starting to create your config file"
     echo "Config file will be located in /etc/ezldap/"
     sleep 2
-    sudo cp assets/ezldap.conf /etc/ezldap/
-    sudo cp assets/ezldap.conf /etc/ezldap/ezldap-config.example
+    sudo cp templates/ezldap.conf /etc/ezldap/
+    sudo cp templates/ezldap.conf /etc/ezldap/ezldap-config.example
     sudo "${EDITOR:-nano}" /etc/ezldap/ezldap.conf
     sudo chmod go-r /etc/ezldap/ezldap.conf
     sudo chmod go-r /etc/ezldap/ezldap-config.example

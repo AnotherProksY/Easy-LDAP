@@ -12,15 +12,15 @@
 # modifications, as long as this notice is preserved.
 #
 
-# Check if '/etc/ezldap/ezldap.conf' exists
+# Check if '$HOME/.ezldap/ezldap.conf' exists
 # True -> source config
 # False -> prints workaround
-CONFIG_FILE=/etc/ezldap/ezldap.conf
+CONFIG_FILE=$HOME/.ezldap/ezldap.conf
 if test -f "$CONFIG_FILE"; then
-    source /etc/ezldap/ezldap.conf
+    source $HOME/.ezldap/ezldap.conf
 else
-    echo "Config file not found :("
-    echo "Try to create a new one. Example file can be found here -> /etc/ezldap/ezldap-config.example"
+    echo "Config file ezldap.conf not found :("
+    echo "Try to create a new one. Example file can be found here -> ~/.ezldap/ezldap-config.example"
     exit 1
 fi
 
@@ -148,8 +148,8 @@ function MODIFY {
 function CONFIG {
     echo "Opening your config file.."
     sleep 1
-    sudo "${EDITOR:-nano}" /etc/ezldap/ezldap.conf
-    source /etc/ezldap/ezldap.conf
+    "${EDITOR:-nano}" $HOME/.ezldap/ezldap.conf
+    source $HOME/.ezldap/ezldap.conf
     echo
     echo "File saved and sourced !"
     echo

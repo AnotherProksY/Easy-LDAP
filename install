@@ -6,20 +6,20 @@
 # If no "/bin" directory, create a new one
 if [ ! -d "$HOME/bin" ]; then
     echo "Creating ~/bin"
-    mkdir $HOME/bin
+    mkdir $HOME/bin;chmod 700 $HOME/bin
     sleep 1
     echo
 fi
 
 # Check what current shell
 if [[ "$SHELL" =~ "bash" ]]; then
-    FILE=~/.bash_profile
+    FILE=$HOME/.bash_profile
     SHELL_NAME="bash"
 elif [[ "$SHELL" =~ "zsh" ]]; then
-    FILE=~/.zshrc
+    FILE=$HOME/.zshrc
     SHELL_NAME="zsh"
 elif [[ "$SHELL" =~ "fish" ]]; then
-    FILE=~/.config/fish/config.fish
+    FILE=$HOME/.config/fish/config.fish
     SHELL_NAME="fish"
 fi
 
@@ -28,14 +28,14 @@ if test -f "$FILE"; then
     if ! grep -qe '$HOME/bin\|~/bin' "$FILE"; then
         echo 'Adding ~/bin to $PATH '$FILE
         if [ "$SHELL_NAME" == "bash" ]; then
-            cat templates/bash.md >> ~/.bash_profile
-            source ~/.bash_profile
+            cat templates/bash.md >> $HOME/.bash_profile
+            source $HOME/.bash_profile
         elif [ "$SHELL_NAME" == "zsh" ]; then
-            cat templates/zsh.md >> ~/.zshrc
-            source ~/.zshrc
+            cat templates/zsh.md >> $HOME/.zshrc
+            source $HOME/.zshrc
         elif [ "$SHELL_NAME" == "fish" ]; then
-            cat templates/fish.md >> ~/.config/fish/config.fish
-            source ~/.config/fish/config.fish
+            cat templates/fish.md >> $HOME/.config/fish/config.fish
+            source $HOME/.config/fish/config.fish
         fi
         sleep 1
         echo
@@ -44,83 +44,65 @@ else
     echo "Creating $FILE"
     echo 'Adding ~/bin to $PATH '$FILE
     if [ "$SHELL_NAME" == "bash" ]; then
-        touch ~/.bash_profile
-        cat templates/bash.md >> ~/.bash_profile
-        source ~/.bash_profile
+        touch $HOME/.bash_profile
+        cat templates/bash.md >> $HOME/.bash_profile
+        source $HOME/.bash_profile
     elif [ "$SHELL_NAME" == "zsh" ]; then
-        touch ~/.zshrc
-        cat templates/zsh.md >> ~/.zshrc
-        source ~/.zshrc
+        touch $HOME/.zshrc
+        cat templates/zsh.md >> $HOME/.zshrc
+        source $HOME/.zshrc
     elif [ "$SHELL_NAME" == "fish" ]; then
-        touch ~/.config/fish/config.fish
-        cat templates/fish.md >> ~/.config/fish/config.fish
-        source ~/.config/fish/config.fish
+        touch $HOME/.config/fish/config.fish
+        cat templates/fish.md >> $HOME/.config/fish/config.fish
+        source $HOME/.config/fish/config.fish
     fi
     sleep 1
     echo
 fi
 
-# If no "ezldap" in "/bin" directory, copy or symlink
-APP_FILE=~/bin/ezldap
+# If no "ezldap" in "/bin" directory, copy
+APP_FILE=$HOME/bin/ezldap
 if ! test -f "$APP_FILE"; then
-    echo "Do you want to copy file or create symlink?" 
-    read -p "'1 copy' || '2 symlink' [1/2]: " answer
-    if [ $answer == "1" ]; then
-        echo "Copying ezldap to ~/bin/"
-        cp ezldap ~/bin/;sudo chmod +x ~/bin/ezldap
-    else
-        echo "Creating symlink for ezldap to ~/bin/"
-        ln -s "$PWD/ezldap" ~/bin;sudo chmod +x ~/bin/ezldap
-    fi
+    echo "Copying ezldap to ~/bin/"
+    cp ezldap $HOME/bin/;chmod 700 $HOME/bin/ezldap
     sleep 1
     echo
 fi
 
-# Get current user name
-if ! [ $(id -u) = 0 ]; then
-    current_user=$USER
-else
-    current_user=$SUDO_USER
+# If no "$HOME/.ezldap" directory, then create a new one
+if [ ! -d "$HOME/.ezldap" ]; then
+    mkdir $HOME/.ezldap;chmod 700 $HOME/.ezldap
 fi
 
-# If no "/etc/ezldap" directory, then create a new one
-if [ ! -d "/etc/ezldap" ]; then
-    sudo mkdir /etc/ezldap
-fi
-
-# If no "/etc/ezldap/ezldap.conf", create a new one
-CONFIG_FILE=/etc/ezldap/ezldap.conf
+# If no "$HOME/.ezldap/ezldap.conf", create a new one
+CONFIG_FILE=$HOME/.ezldap/ezldap.conf
 if ! test -f "$CONFIG_FILE"; then
     echo "Starting to create your config file"
-    echo "Config file will be located in /etc/ezldap/"
-    sleep 2
-    sudo cp templates/ezldap.conf /etc/ezldap/
-    sudo cp templates/ezldap.conf /etc/ezldap/ezldap-config.example
-    sudo "${EDITOR:-nano}" /etc/ezldap/ezldap.conf
-    sudo chmod go-r /etc/ezldap/ezldap.conf
-    sudo chmod go-r /etc/ezldap/ezldap-config.example
-    sudo chown $current_user /etc/ezldap/ezldap.conf
-    sudo chown $current_user /etc/ezldap/ezldap-config.example
+    echo "Config file will be located in ~/.ezldap/"
+    sleep 1
+    cp templates/ezldap.conf $HOME/.ezldap/
+    cp templates/ezldap.conf $HOME/.ezldap/ezldap-config.example
+    "${EDITOR:-nano}" $HOME/.ezldap/ezldap.conf
+    chmod 600 $HOME/.ezldap/ezldap.conf
+    chmod 600 $HOME/.ezldap/ezldap-config.example
 fi
 
-# If no "/etc/ezldap/install", copy this script to destination directory
-INSTALL_FILE=/etc/ezldap/install
+# If no "$HOME/.ezldap/install", copy this script to destination directory
+INSTALL_FILE=$HOME/.ezldap/install
 if ! test -f "$INSTALL_FILE"; then
-    echo "Copying install to /etc/ezldap"
+    echo "Copying install script to ~/.ezldap"
     sleep 1
-    sudo cp install /etc/ezldap/
-    sudo chmod 700 /etc/ezldap/install
-    sudo chown $current_user /etc/ezldap/install
+    cp install $HOME/.ezldap/
+    chmod 700 $HOME/.ezldap/install
 fi
 
-# If no "/etc/ezldap/uninstall", copy uninstall script to destination directory
-UNINSTALL_FILE=/etc/ezldap/uninstall
+# If no "$HOME/.ezldap/uninstall", copy uninstall script to destination directory
+UNINSTALL_FILE=$HOME/.ezldap/uninstall
 if ! test -f "$UNINSTALL_FILE"; then
-    echo "Copying uninstall to /etc/ezldap"
+    echo "Copying uninstall script to ~/.ezldap"
     sleep 1
-    sudo cp uninstall /etc/ezldap/
-    sudo chmod 700 /etc/ezldap/uninstall
-    sudo chown $current_user /etc/ezldap/uninstall
+    cp uninstall $HOME/.ezldap/
+    chmod 700 $HOME/.ezldap/uninstall
     exit 1
 fi
 

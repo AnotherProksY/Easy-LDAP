@@ -56,7 +56,7 @@ search_base="dc=super,dc=domain,dc=com"
 ## To uninstall
 - Use this script:
 ```bash
-/etc/ezldap/uninstall
+~/.ezldap/uninstall
 ```
 
 ## Usage examples

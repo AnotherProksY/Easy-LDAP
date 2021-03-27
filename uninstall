@@ -6,15 +6,15 @@
 # If "ezldap" in "/bin" directory, delete it
 APP_FILE=$HOME/bin/ezldap
 if test -f "$APP_FILE"; then
-    echo "Removing ezldap from ~/bin/"
-    rm $HOME/bin/ezldap
+  echo "Removing ezldap from ~/bin/"
+  rm $HOME/bin/ezldap
 fi
 
 # If "$HOME/.ezldap" directory exists, then delete it
 if [ -d "$HOME/.ezldap" ]; then
-    echo "Deleting ~/.ezldap"
-    rm -rf $HOME/.ezldap
-    echo
+  echo "Deleting ~/.ezldap"
+  rm -rf $HOME/.ezldap
+  echo
 fi
 
 echo "Done!"

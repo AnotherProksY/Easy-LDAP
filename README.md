@@ -1,14 +1,14 @@
 <p align="center">
-    <img width="25%" src="assets/ezldap.svg" alt="Banner">
+  <img width="25%" src="assets/ezldap.svg" alt="Banner">
 </p>
 <p align="center">
-    <b>Easy to use wrapper for commandline LDAP tools.</b><br />
-    <b>Written on Bash Script with Love ❤️</b>
+  <b>Easy to use wrapper for commandline LDAP tools.</b><br />
+  <b>Written on Bash Script with Love ❤️</b>
 </p>
 <p align="center">
-    <a href="https://github.com/AnotherProksY/Easy-LDAP/blob/master/LICENSE">
-        <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License Badge">
-    </a>
+  <a href="https://github.com/AnotherProksY/Easy-LDAP/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License Badge">
+  </a>
 </p>
 
 <br />

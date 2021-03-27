@@ -17,11 +17,11 @@
 # False -> prints workaround
 CONFIG_FILE=$HOME/.ezldap/ezldap.conf
 if test -f "$CONFIG_FILE"; then
-    source $HOME/.ezldap/ezldap.conf
+  source $HOME/.ezldap/ezldap.conf
 else
-    echo "Config file ezldap.conf not found :("
-    echo "Try to create a new one. Example file can be found here -> ~/.ezldap/ezldap-config.example"
-    exit 1
+  echo "Config file ezldap.conf not found :("
+  echo "Try to create a new one. Example file can be found here -> ~/.ezldap/ezldap-config.example"
+  exit 1
 fi
 
 ########################################
@@ -45,32 +45,32 @@ fi
 #   None
 ########################################
 function LDAP_SEARCH {
-    # Check search type
-    # If ! '-g' option was provided -> use first search method
-    # If '-g' option was provided -> use second search method
-    if [ -z "$GROUP" ]; then
-        local filter="(&(objectCategory=Person)(mail=*$EMAIL)(displayName=*${DISNAME})(cn=*${NAME})(sAMAccountName=*$LOGIN))"
-        local basic_attribute="name displayName sAMAccountName mail physicalDeliveryOfficeName telephoneNumber birthDate"
-    else
-        local filter="(&(objectClass=group)(sAMAccountName=*$GROUP))"
-        local basic_attribute="member distinguishedName name sAMAccountName managedBy mail mailNickname description"
-    fi
+  # Check search type
+  # If ! '-g' option was provided -> use first search method
+  # If '-g' option was provided -> use second search method
+  if [ -z "$GROUP" ]; then
+    local filter="(&(objectCategory=Person)(mail=*$EMAIL)(displayName=*${DISNAME})(cn=*${NAME})(sAMAccountName=*$LOGIN))"
+    local basic_attribute="name displayName sAMAccountName mail physicalDeliveryOfficeName telephoneNumber birthDate"
+  else
+    local filter="(&(objectClass=group)(sAMAccountName=*$GROUP))"
+    local basic_attribute="member distinguishedName name sAMAccountName managedBy mail mailNickname description"
+  fi
 
-    # Fill required 'ldapsearch' options
-    # Removes unwanted 'stdout' lines
-    # Decodes 'Base64' to 'UTF-8'
-    ldapsearch \
-    -LLL \
-    -o ldif-wrap=no \
-    -H ldaps://$domain \
-    -D "$username" \
-    -w "$password" \
-    -b "$search_base" \
-    $filter \
-    $basic_attribute \
-    $ATTRIBUTE \
-    | egrep -v "^# refldaps:" \
-    | perl -MMIME::Base64 -Mutf8 -pe 's/^([-a-zA-Z0-9;]+):(:\s+)(\S+)$/$1.$2.&decode_base64($3)/e'
+  # Fill required 'ldapsearch' options
+  # Removes unwanted 'stdout' lines
+  # Decodes 'Base64' to 'UTF-8'
+  ldapsearch \
+  -LLL \
+  -o ldif-wrap=no \
+  -H ldaps://$domain \
+  -D "$username" \
+  -w "$password" \
+  -b "$search_base" \
+  $filter \
+  $basic_attribute \
+  $ATTRIBUTE \
+  | egrep -v "^# refldaps:" \
+  | perl -MMIME::Base64 -Mutf8 -pe 's/^([-a-zA-Z0-9;]+):(:\s+)(\S+)$/$1.$2.&decode_base64($3)/e'
 }
 
 ########################################
@@ -90,22 +90,22 @@ function LDAP_SEARCH {
 #   None
 ########################################
 function LDAP_MODIFY {
-    # Runs echo commands in one scope
-    # Fill required 'ldapmodify' options
-    # Remove unwanted 'stdout' lines
-    {
-    echo "dn: $group_dn"
-    echo "changetype: modify"
-    echo "$modify_type: member"
-    echo "member: $user_dn"
-    } | \
-    ldapmodify \
-    -H ldaps://$domain \
-    -D "$username" \
-    -w "$password" \
-    | egrep -v "^modifying entry"
-    echo "Successfully $modify_type!"
-    exit 1
+  # Runs echo commands in one scope
+  # Fill required 'ldapmodify' options
+  # Remove unwanted 'stdout' lines
+  {
+  echo "dn: $group_dn"
+  echo "changetype: modify"
+  echo "$modify_type: member"
+  echo "member: $user_dn"
+  } | \
+  ldapmodify \
+  -H ldaps://$domain \
+  -D "$username" \
+  -w "$password" \
+  | egrep -v "^modifying entry"
+  echo "Successfully $modify_type!"
+  exit 1
 }
 
 ########################################
@@ -125,12 +125,12 @@ function LDAP_MODIFY {
 #   None
 ########################################
 function MODIFY {
-    read -p "'add' or 'delete' user from group [add/delete]: " modify_type
-    read -p "Copy 'DN' group attribute and paste here: " group_dn
-    read -p "Copy 'DN' user attribute and paste here: " user_dn
-    echo
-    echo
-    LDAP_MODIFY
+  read -p "'add' or 'delete' user from group [add/delete]: " modify_type
+  read -p "Copy 'DN' group attribute and paste here: " group_dn
+  read -p "Copy 'DN' user attribute and paste here: " user_dn
+  echo
+  echo
+  LDAP_MODIFY
 }
 
 ########################################
@@ -146,14 +146,14 @@ function MODIFY {
 #   None
 ########################################
 function CONFIG {
-    echo "Opening your config file.."
-    sleep 1
-    "${EDITOR:-nano}" $HOME/.ezldap/ezldap.conf
-    source $HOME/.ezldap/ezldap.conf
-    echo
-    echo "File saved and sourced !"
-    echo
-    exit 1
+  echo "Opening your config file.."
+  sleep 1
+  "${EDITOR:-nano}" $HOME/.ezldap/ezldap.conf
+  source $HOME/.ezldap/ezldap.conf
+  echo
+  echo "File saved and sourced !"
+  echo
+  exit 1
 }
 
 ########################################
@@ -169,46 +169,46 @@ function CONFIG {
 #   None
 ########################################
 function HELP {
-    # Get filename
-    local _self="${0##*/}"
+  # Get filename
+  local _self="${0##*/}"
 
-    # Get current user name for output
-    if ! [ $(id -u) = 0 ]; then
-        local current_user=$USER
-    else
-        local current_user=$SUDO_USER
-    fi
+  # Get current user name for output
+  if ! [ $(id -u) = 0 ]; then
+    local current_user=$USER
+  else
+    local current_user=$SUDO_USER
+  fi
 
-    echo "Options:"
-    echo
-    echo "  -h           show this help"
-    echo "  -d  <name>   search user by 'displayName'"
-    echo "  -n  <name>   search user by 'CN'"
-    echo "  -e  <mail>   search user by 'mail'"
-    echo "  -l  <login>  search user by 'sAMAccountName'"
-    echo "  -g  <group>  search group by 'sAMAccountName'"
-    echo "  -a  <attr>   add additional attribute's"
-    echo "  -m           add/delete user from group"
-    echo "  -c           edit config file"
-    echo
-    echo "Usage examples:"
-    echo
-    echo "  To find user:"
-    echo "      $_self -d Фазилов Камил -a memberOf department"
-    echo "      $_self -n Fazilov Kamil -a memberOf department"
-    echo "      $_self -e k.fazilov@domain.com -a memberOf department"
-    echo "      $_self -l $current_user -a memberOf department"
-    echo
-    echo "  To find group:"
-    echo "      $_self -g all-users -a objectSid"
-    echo
-    echo "  To add/delete user from group:"
-    echo "      $_self -m"
-    echo
-    echo "  To edit config file:"
-    echo "      $_self -c"
-    echo
-    exit 1
+  echo "Options:"
+  echo
+  echo "  -h           show this help"
+  echo "  -d  <name>   search user by 'displayName'"
+  echo "  -n  <name>   search user by 'CN'"
+  echo "  -e  <mail>   search user by 'mail'"
+  echo "  -l  <login>  search user by 'sAMAccountName'"
+  echo "  -g  <group>  search group by 'sAMAccountName'"
+  echo "  -a  <attr>   add additional attribute's"
+  echo "  -m           add/delete user from group"
+  echo "  -c           edit config file"
+  echo
+  echo "Usage examples:"
+  echo
+  echo "  To find user:"
+  echo "      $_self -d Фазилов Камил -a memberOf department"
+  echo "      $_self -n Fazilov Kamil -a memberOf department"
+  echo "      $_self -e k.fazilov@domain.com -a memberOf department"
+  echo "      $_self -l $current_user -a memberOf department"
+  echo
+  echo "  To find group:"
+  echo "      $_self -g all-users -a objectSid"
+  echo
+  echo "  To add/delete user from group:"
+  echo "      $_self -m"
+  echo
+  echo "  To edit config file:"
+  echo "      $_self -c"
+  echo
+  exit 1
 }
 
 ########################################
@@ -224,10 +224,10 @@ function HELP {
 ########################################
 function CHECK_ARG()
 {
-    if [[ $2 == -* ]]; then 
-        echo "Option $1 requires an argument" >&2
-        exit 1
-    fi
+  if [[ $2 == -* ]]; then 
+    echo "Option $1 requires an argument" >&2
+    exit 1
+  fi
 }
 
 ########################################
@@ -243,15 +243,15 @@ function CHECK_ARG()
 ########################################
 function COPYRIGHT()
 {
-    echo '"Easy-LDAP"'
-    echo
-    echo "Copyright (C) 2019 by Kamil Fazilov"
-    echo
-    echo "This file is free software; as a special exception the author gives"
-    echo "unlimited permission to copy and/or distribute it, with or without"
-    echo "modifications, as long as this notice is preserved."
-    echo
-    exit 1
+  echo '"Easy-LDAP"'
+  echo
+  echo "Copyright (C) 2019 by Kamil Fazilov"
+  echo
+  echo "This file is free software; as a special exception the author gives"
+  echo "unlimited permission to copy and/or distribute it, with or without"
+  echo "modifications, as long as this notice is preserved."
+  echo
+  exit 1
 }
 
 ########################################
@@ -277,78 +277,78 @@ function COPYRIGHT()
 ########################################
 function PARSE_PARAM()
 {
-    # Check if any options was provided
-    # True -> jump to getopts switch case
-    # False -> shows copyright
-    if [ -z "$1" ]; then
-        echo
-        COPYRIGHT
-    fi
+  # Check if any options was provided
+  # True -> jump to getopts switch case
+  # False -> shows copyright
+  if [ -z "$1" ]; then
+    echo
+    COPYRIGHT
+  fi
 
-    while getopts ":d:n:e:l:g:a:mhc" opt; do
-        case $opt in
-            d)
-                CHECK_ARG "-d" "$OPTARG"
-                ARG_LIST_D=(${OPTARG})
-                until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
-                    ARG_LIST_D+=($(eval "echo \${$OPTIND}"))
-                    OPTIND=$((OPTIND + 1))
-                done
-                DISNAME=$(echo ${ARG_LIST_D[@]} | tr ' ' "*")
-                ;;
-            n)
-                CHECK_ARG "-n" "$OPTARG"
-                ARG_LIST_N=(${OPTARG})
-                until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
-                    ARG_LIST_N+=($(eval "echo \${$OPTIND}"))
-                    OPTIND=$((OPTIND + 1))
-                done
-                NAME=$(echo ${ARG_LIST_N[@]} | tr ' ' "*")
-                ;;
-            e)
-                CHECK_ARG "-e" "$OPTARG"
-                EMAIL=${OPTARG}
-                ;;
-            l)
-                CHECK_ARG "-l" "$OPTARG"
-                LOGIN=${OPTARG}
-                ;;
-            g)
-                CHECK_ARG "-g" "$OPTARG"
-                GROUP=${OPTARG}
-                ;;
-            a)
-                CHECK_ARG "-a" "$OPTARG"
-                ARG_LIST_A=(${OPTARG})
-                until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
-                    ARG_LIST_A+=($(eval "echo \${$OPTIND}"))
-                    OPTIND=$((OPTIND + 1))
-                done
-                ATTRIBUTE=${ARG_LIST_A[@]}
-                ;;
-            m)
-                MODIFY
-                ;;
-            h)
-                HELP
-                ;;
-            c)
-                CONFIG
-                ;;
-            \?)
-                echo "illegal option: -$OPTARG" >&2
-                echo "Check available options using: -h"
-                exit 1
-                ;;
-            :)
-                echo "Option -$OPTARG requires an argument!" >&2
-                echo "Check available options using: -h"
-                exit 1
-                ;;
-        esac
-    done
+  while getopts ":d:n:e:l:g:a:mhc" opt; do
+    case $opt in
+      d)
+        CHECK_ARG "-d" "$OPTARG"
+        ARG_LIST_D=(${OPTARG})
+        until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
+            ARG_LIST_D+=($(eval "echo \${$OPTIND}"))
+            OPTIND=$((OPTIND + 1))
+        done
+        DISNAME=$(echo ${ARG_LIST_D[@]} | tr ' ' "*")
+        ;;
+      n)
+        CHECK_ARG "-n" "$OPTARG"
+        ARG_LIST_N=(${OPTARG})
+        until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
+            ARG_LIST_N+=($(eval "echo \${$OPTIND}"))
+            OPTIND=$((OPTIND + 1))
+        done
+        NAME=$(echo ${ARG_LIST_N[@]} | tr ' ' "*")
+        ;;
+      e)
+        CHECK_ARG "-e" "$OPTARG"
+        EMAIL=${OPTARG}
+        ;;
+      l)
+        CHECK_ARG "-l" "$OPTARG"
+        LOGIN=${OPTARG}
+        ;;
+      g)
+        CHECK_ARG "-g" "$OPTARG"
+        GROUP=${OPTARG}
+        ;;
+      a)
+        CHECK_ARG "-a" "$OPTARG"
+        ARG_LIST_A=(${OPTARG})
+        until [[ $(eval "echo \${$OPTIND}") =~ ^-.* ]] || [ -z $(eval "echo \${$OPTIND}") ]; do
+            ARG_LIST_A+=($(eval "echo \${$OPTIND}"))
+            OPTIND=$((OPTIND + 1))
+        done
+        ATTRIBUTE=${ARG_LIST_A[@]}
+        ;;
+      m)
+        MODIFY
+        ;;
+      h)
+        HELP
+        ;;
+      c)
+        CONFIG
+        ;;
+      \?)
+        echo "illegal option: -$OPTARG" >&2
+        echo "Check available options using: -h"
+        exit 1
+        ;;
+      :)
+        echo "Option -$OPTARG requires an argument!" >&2
+        echo "Check available options using: -h"
+        exit 1
+        ;;
+    esac
+  done
 
-    LDAP_SEARCH
+  LDAP_SEARCH
 }
 
 PARSE_PARAM $@

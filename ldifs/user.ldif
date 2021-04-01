@@ -1,0 +1,16 @@
+dn: uid=username,dc=super,dc=domain,dc=com
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: username
+uid: username
+uidNumber: 16859
+gidNumber: 100
+homeDirectory: /home/username
+loginShell: /bin/bash
+gecos: username
+userPassword: {crypt}x
+shadowLastChange: 0
+shadowMax: 0
+shadowWarning: 0

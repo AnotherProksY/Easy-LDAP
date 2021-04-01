@@ -4,9 +4,6 @@
 .AppleDouble
 .LSOverride
 
-# Ldif files
-*.ldif
-
 # Vim
 *.swp
 
